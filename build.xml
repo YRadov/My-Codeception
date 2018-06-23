@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Sample" basedir="." default="composer_dump">
 
+    <target name="generate_acceptance">
+        <echo msg="Generate acceptance test ..."/>
+        <exec command="vendor/bin/codecept generate:cest acceptance First" dir="."/>
+    </target>
+
+
     <target name="codecept_start">
         <echo msg="Codeception is running ..."/>
-        <exec command="vendor/bin/codecept" dir="."/>
+        <exec command="vendor/bin/codecept run" dir="."/>
     </target>
 
 
@@ -15,6 +21,11 @@
     <target name="bootstrap">
         <echo msg="Codeception init ..."/>
         <exec command="vendor/bin/codecept bootstrap" dir="."/>
+    </target>
+
+    <target name="new_actors">
+        <echo msg="Codeception build ..."/>
+        <exec command="vendor/bin/codecept build" dir="."/>
     </target>
 
     <target name="composer_dump">
