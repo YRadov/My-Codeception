@@ -15,6 +15,5 @@ modules:
     config:
 #        PhpBrowser:
         WebDriver:
-#           url: https://rozetka.com.ua/
             url: https://rozetka.com.ua/
             browser: chrome
