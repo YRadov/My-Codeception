@@ -56,7 +56,7 @@ class FirstCest
 
 	public function checkSearch(AcceptanceTester $I)
 	{
-		$I->amGoingTo('go to catalog with computers');
+		$I->amGoingTo('Go to catalog with computers');
 		$I->click('Ноутбуки и компьютеры');
 		$I->seeInCurrentUrl('/computers-notebooks/');
 		$I->seeElement('a.pab-h3-link:first-child');
@@ -65,7 +65,7 @@ class FirstCest
 		$I->seeInCurrentUrl('/notebooks/');
 		$I->see('Ноутбуки', '.pab-h1');
 
-		$I->amGoingTo('grab first commodity name');
+		$I->amGoingTo('Grab first commodity name');
 		$I->wait(3);
 		$I->seeElement('.g-title-link:first-child');
 		$firstCommodityName = $I->grabTextFrom(".g-title-link:first-child");
@@ -73,14 +73,22 @@ class FirstCest
 		$I->assertNotEmpty($firstCommodityName);
 		$I->assertGreaterThan(0, $firstCommodityPrice);
 
-		$I->amGoingTo('search first commodity');
+		$I->amGoingTo('Search first commodity');
 		$I->fillField('text', $firstCommodityName);
 		$I->click('Найти');
-		$I->seeInCurrentUrl('/search/');
-		$I->see($firstCommodityName, '#search_result_title_text');
 
-		$I->amGoingTo('see the commodity found');
-		$I->click($firstCommodityName);
+		/**
+		 * if there is only one commodity,
+		 * go immediately in details view
+		 * instead search page
+		 */
+		$currentUrl = $I->grabFromCurrentUrl();
+		if (strpos ($currentUrl, '/search/' !== false)) {
+			$I->seeInCurrentUrl('/search/');
+			$I->see($firstCommodityName, '#search_result_title_text');
+			$I->amGoingTo('See the commodity found in detail');
+			$I->click($firstCommodityName);
+		}
 		$I->see($firstCommodityName, '.detail-title');
 		$priceInDetailView = (int)$I->grabTextFrom("#price_label");
 		$I->assertEquals($firstCommodityPrice, $priceInDetailView);
