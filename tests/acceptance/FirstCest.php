@@ -5,6 +5,7 @@ class FirstCest
 {
     public function _before(AcceptanceTester $I)
     {
+	    $I->amOnPage('/');
     }
 
     public function _after(AcceptanceTester $I)
@@ -14,14 +15,13 @@ class FirstCest
 
 	public function frontpageWorks(AcceptanceTester $I)
 	{
-		$I->amOnPage('/');
-		$I->see('Каталог товаров');
+		$I->see('Каталог товаров', '.btn-link-i');
 	}//frontpageWorks
 
 	public function goToCatalog(AcceptanceTester $I)
 	{
 		$I->amGoingTo('Check catalog computers-notebooks');
-		$I->amOnPage('/');
+//		$I->amOnPage('/');
 		$I->see('Каталог товаров');
 		$I->click('Ноутбуки и компьютеры');
 
@@ -46,14 +46,44 @@ class FirstCest
 		$I->seeInTitle('Компьютеры и ноутбуки - Rozetka.ua');
 		$I->dontSeeInTitle('Determine');
 
-
 		$catalogName = $I->grabFromCurrentUrl();
 		$I->assertContains("computers-notebooks", $catalogName);
-
 
 		//codecept_debug($catalogName); // only with --debug
 		//codecept_debug($I->grabTextFrom('#name'));
 
 	}//goToCatalog
+
+	public function checkSearch(AcceptanceTester $I)
+	{
+		$I->amGoingTo('go to catalog with computers');
+		$I->click('Ноутбуки и компьютеры');
+		$I->seeInCurrentUrl('/computers-notebooks/');
+		$I->seeElement('a.pab-h3-link:first-child');
+		$I->click("a.pab-h3-link:first-child");
+//		//$I->click("Ноутбуки");
+		$I->seeInCurrentUrl('/notebooks/');
+		$I->see('Ноутбуки', '.pab-h1');
+
+		$I->amGoingTo('grab first commodity name');
+		$I->wait(3);
+		$I->seeElement('.g-title-link:first-child');
+		$firstCommodityName = $I->grabTextFrom(".g-title-link:first-child");
+		$firstCommodityPrice = (int)$I->grabTextFrom(".g-price-uah:first-child");
+		$I->assertNotEmpty($firstCommodityName);
+		$I->assertGreaterThan(0, $firstCommodityPrice);
+
+		$I->amGoingTo('search first commodity');
+		$I->fillField('text', $firstCommodityName);
+		$I->click('Найти');
+		$I->seeInCurrentUrl('/search/');
+		$I->see($firstCommodityName, '#search_result_title_text');
+
+		$I->amGoingTo('see the commodity found');
+		$I->click($firstCommodityName);
+		$I->see($firstCommodityName, '.detail-title');
+		$priceInDetailView = (int)$I->grabTextFrom("#price_label");
+		$I->assertEquals($firstCommodityPrice, $priceInDetailView);
+	}//checkSearch
 
 }//FirstCest

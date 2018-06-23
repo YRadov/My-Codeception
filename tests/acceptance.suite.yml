@@ -8,11 +8,13 @@ actor: AcceptanceTester
 modules:
     enabled:
 #        - PhpBrowser:
-#            url: https://rozetka.com.ua/
-#            url: http://localhost/myapp
         - WebDriver:
-            url: https://rozetka.com.ua/
-            browser: chrome
         - \Helper\Acceptance
         - Asserts
 #        - Db
+    config:
+#        PhpBrowser:
+        WebDriver:
+#           url: https://rozetka.com.ua/
+            url: https://rozetka.com.ua/
+            browser: chrome
