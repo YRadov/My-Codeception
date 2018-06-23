@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Sample" basedir="." default="composer_dump">
+
+    <target name="codecept_start">
+        <echo msg="Codeception is running ..."/>
+        <exec command="vendor/bin/codecept" dir="."/>
+    </target>
+
+
+    <target name="selenium_test_start">
+        <echo msg="Selenium server is running ..."/>
+        <exec command="java -jar -Dwebdriver.chrome.driver=chromedriver selenium.jar" dir="."/>
+    </target>
+
+    <target name="bootstrap">
+        <echo msg="Codeception init ..."/>
+        <exec command="vendor/bin/codecept bootstrap" dir="."/>
+    </target>
+
+    <target name="composer_dump">
+        <echo msg="Composer dampautoloading ..."/>
+        <exec command="composer dumpautoload -o" dir="."/>
+    </target>
+
+    <!--<target name="bower_install">-->
+        <!--<echo msg="Bower install package ..."/>-->
+        <!--<exec command="bower install slick-carousel" dir="./public"/>-->
+    <!--</target>-->
+
+
+
+    <!--<target name="build" depends="apidoc">-->
+
+    <!--</target>-->
+</project>
